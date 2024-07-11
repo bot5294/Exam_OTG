@@ -1,7 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Linking, TouchableOpacity, Image, TextInput } from "react-native";
+import { StyleSheet, Text, View, Linking, TouchableOpacity, Image, TextInput, Alert } from "react-native";
 import React, { useState } from "react";
 import Checkbox from 'expo-checkbox';
+import SignupButton from "../assets/buttons/signupButton";
+import axios from "axios";
 
 export default function Signup() {
   const [username, onChangeUsername] = useState("");
@@ -12,7 +14,22 @@ export default function Signup() {
   const handleLinkPress = () => {
     Linking.openURL('https://www.example.com/terms-and-conditions'); // Replace with your terms and conditions URL
   };
-
+  const handleSignupPress = async () => {
+    try {
+      if(!isSelected){
+          Alert.alert('Please agree to the Terms and Conditions.');
+          return;
+      }
+        const response = await axios.post('http://localhost:3000/signup', {
+            username: username,
+            email:email,
+            password: password,
+        });
+        Alert.alert('Login Successful', `Welcome ${response.data.username}`);
+    } catch (error) {
+        Alert.alert('Login Failed', 'Invalid username or password');
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -29,7 +46,7 @@ export default function Signup() {
           style={styles.input}
           onChangeText={onChangeUsername}
           value={username}
-          placeholder="Full Name"
+          placeholder="Username"
         />
         <TextInput
           style={styles.input}
@@ -57,6 +74,7 @@ export default function Signup() {
             </TouchableOpacity>
           </Text>
         </View>
+        <SignupButton onPress={handleSignupPress} />
       </View>
       <View style={styles.bottom}>
       </View>

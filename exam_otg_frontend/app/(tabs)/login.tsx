@@ -12,17 +12,14 @@ export default function login(){
     }
     const handleLoginPress = async () => {
         try {
-            const response = await axios.post('https://localhost:3000/login', {
+            const response = await axios.post('http://localhost:3000/login', {
                 username: username,
-                password: password
+                password: password,
             });
-            // Handle successful login here
             Alert.alert('Login Successful', `Welcome ${response.data.username}`);
         } catch (error) {
-            // Handle login error here
             Alert.alert('Login Failed', 'Invalid username or password');
         }
-        // Linking.openURL('https://localhost:8084/login'); // Replace with your terms and conditions URL
       };
     return (
         <View style={styles.container}>

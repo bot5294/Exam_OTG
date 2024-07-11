@@ -1,10 +1,29 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet,Text,View,Image,TextInput } from "react-native";
+import { StyleSheet,Text,View,Image,TextInput, TouchableOpacity, Linking, Alert } from "react-native";
 import React from "react";
+import LoginButton from "../assets/buttons/loginButton";
+import axios from "axios";
 
 export default function login(){
     const [username,onChangeUsername] = React.useState("");
     const [password,onChangePassword] = React.useState("");
+    function handleLinkPress(): void {
+        Linking.openURL('/signup');
+    }
+    const handleLoginPress = async () => {
+        try {
+            const response = await axios.post('https://localhost:3000/login', {
+                username: username,
+                password: password
+            });
+            // Handle successful login here
+            Alert.alert('Login Successful', `Welcome ${response.data.username}`);
+        } catch (error) {
+            // Handle login error here
+            Alert.alert('Login Failed', 'Invalid username or password');
+        }
+        // Linking.openURL('https://localhost:8084/login'); // Replace with your terms and conditions URL
+      };
     return (
         <View style={styles.container}>
             <View style={styles.top}>
@@ -25,7 +44,15 @@ export default function login(){
                 onChangeText={onChangePassword}
                 value={password}
                 placeholder="Password"
+                secureTextEntry={true}
                 />
+                          <Text style={styles.text}>
+            Don't have an account?{' '}
+            <TouchableOpacity onPress={handleLinkPress}>
+              <Text style={styles.link}>Sign Up</Text>
+            </TouchableOpacity>
+          </Text>
+          <LoginButton onPress={handleLoginPress} />
             </View>
             <View style={styles.bottom}>
             </View>
@@ -68,5 +95,12 @@ const styles = StyleSheet.create({
         margin:12,
         borderWidth:1,
         padding:10
+    },
+    text:{
+        textAlign:'center'
+    },
+    link:{
+        color: 'blue',
+        textDecorationLine: 'underline',
     }
 })

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Linking, TouchableOpacity, Image, TextInput, Alert } from "react-native";
+import { StyleSheet, Text, View, Linking, TouchableOpacity, Image, TextInput, Alert, Platform } from "react-native";
 import React, { useState } from "react";
 import Checkbox from 'expo-checkbox';
 import SignupButton from "../assets/buttons/signupButton";
@@ -25,7 +25,19 @@ export default function Signup() {
             email:email,
             password: password,
         });
-        Alert.alert('Login Successful', `Welcome ${response.data.username}`);
+        console.log(response);
+        if(response.status==200){
+          if(response.data.status){
+            Alert.alert('Login Successful', `Welcome ${response.data.username}`);
+          }else{
+            if(Platform.OS=='web'){{
+              window.alert(response.data.msg);
+            }}else{
+              Alert.alert(response.data.msg);
+            }
+          }
+
+        }
     } catch (error) {
         Alert.alert('Login Failed', 'Invalid username or password');
     }

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet,Text,View,Image,TextInput, TouchableOpacity, Linking, Alert } from "react-native";
+import { StyleSheet,Text,View,Image,TextInput, TouchableOpacity, Linking, Alert, Platform } from "react-native";
 import React from "react";
 import LoginButton from "../assets/buttons/loginButton";
 import axios from "axios";
@@ -16,9 +16,13 @@ export default function login(){
                 username: username,
                 password: password,
             });
-            Alert.alert('Login Successful', `Welcome ${response.data.username}`);
+            if(Platform.OS=='web'){
+                window.alert(response.data.message)
+            }else{
+                Alert.alert('Login Successful', `Welcome ${response.data.username}`);
+            }
         } catch (error) {
-            Alert.alert('Login Failed', 'Invalid username or password');
+            Alert.alert('Login Failed', 'Invalid username or password'+ error);
         }
       };
     return (

@@ -9,6 +9,13 @@ exports.signup = async (req, res) => {
     const { username, email, password } = req.body;
     console.log("Username, Email, Password:", username + ' : ' + email + ' : ' + password);
 
+    // check if user already exists
+    let isAlreadyExists = await StudentLogin.findOne({"username":username});
+
+    if(isAlreadyExists){
+      return res.status(200).json({status:false,msg:'Username Already Taken.'});
+    }
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 

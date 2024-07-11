@@ -9,7 +9,13 @@ const connectDB = require('./config/db');
 const app = express();
 connectDB();
 // Middleware
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200,
+  };
+
+
+app.use(cors(corsOptions));
 app.use(express.json()); // Middleware to parse JSON
 app.use(express.urlencoded({ extended: true }));
 

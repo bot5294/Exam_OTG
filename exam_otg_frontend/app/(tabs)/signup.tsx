@@ -27,19 +27,21 @@ export default function Signup() {
         });
         console.log(response);
         if(response.status==200){
-          if(response.data.status){
-            Alert.alert('Login Successful', `Welcome ${response.data.username}`);
+          if(response.data.success){
+              showAlert('Signup Successful', `Welcome ${response.data.username}`);
           }else{
-            if(Platform.OS=='web'){{
-              window.alert(response.data.msg);
-            }}else{
-              Alert.alert(response.data.msg);
-            }
+              showAlert('Signup Failed',response.data.msg);
           }
-
         }
     } catch (error) {
-        Alert.alert('Login Failed', 'Invalid username or password');
+        showAlert('Signup Failed', 'Invalid username or password');
+    }
+  };
+  const showAlert = (title: string, message: string | undefined) => {
+    if (Platform.OS === 'web') {
+      window.alert(`${title}\n\n${message}`);
+    } else {
+      Alert.alert(title, message);
     }
   };
   return (

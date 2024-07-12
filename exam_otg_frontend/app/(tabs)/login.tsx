@@ -1,8 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet,Text,View,Image,TextInput, TouchableOpacity, Linking, Alert, Platform } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import LoginButton from "../assets/buttons/loginButton";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function login(){
     const [username,onChangeUsername] = React.useState("");
@@ -10,19 +11,35 @@ export default function login(){
     function handleLinkPress(): void {
         Linking.openURL('/signup');
     }
+    // useEffect(() => {
+    //     const checkLoginStatus = async () => {
+    //       const token = await AsyncStorage.getItem('token');
+    //       if (token) {
+    //         // Validate the token with the backend if necessary
+    //         // Navigate to the main app screen
+    //       }
+    //     };
+    
+    //     checkLoginStatus();
+    //   }, []);
+
     const handleLoginPress = async () => {
         try {
             const response = await axios.post('http://localhost:3000/login', {
                 username: username,
                 password: password,
             });
-            if(Platform.OS=='web'){
-                window.alert(response.data.message)
-            }else{
-                Alert.alert('Login Successful', `Welcome ${response.data.username}`);
-            }
+            await AsyncStorage.setItem('token',response.data.token);
+            showAlert('Login Successful', `Welcome ${response.data.username}`);
         } catch (error) {
-            Alert.alert('Login Failed', 'Invalid username or password'+ error);
+            showAlert('Login Failed', 'Invalid username or password'+ error);
+        }
+      };
+      const showAlert = (title: string, message: string | undefined) => {
+        if (Platform.OS === 'web') {
+          window.alert(`${title}\n\n${message}`);
+        } else {
+          Alert.alert(title, message);
         }
       };
     return (

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const StudentLogin = require('../models/loginModel');
@@ -17,7 +18,7 @@ exports.login = async (req, res) => {
       // Compare the hashed password
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (isPasswordValid) {
-        const token = jwt.sign({id:user._id},'JWT_SECRET',{expiresIn:'2h'});
+        const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:'2h'});
         return res.json({ success: true, message: 'Login successful!',token,username });
       } else {
         return res.json({ success: false, message: 'Invalid username or password' });

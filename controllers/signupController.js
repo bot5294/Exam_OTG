@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
     // Save the user to the database
     await newUser.save();
 
-    return res.json({ success: true, message: 'Signup successful!',username });
+    return res.json({ success: true, message: 'Signup successfull!',username });
   } catch (error) {
     console.error("Error:", error);
     return res.status(500).json({ success: false, message: 'Server error' });

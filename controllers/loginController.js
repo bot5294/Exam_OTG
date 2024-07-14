@@ -8,13 +8,14 @@ exports.login = async (req, res) => {
   try {
     console.log("Request Body:", req.body);
 
-    const { username, password } = req.body;
-    console.log("Username, Password:", username + ' : ' + password);
+    const { email, password } = req.body;
+    console.log("Email, Password:", email + ' : ' + password);
 
     // Find the user by username
-    const user = await StudentLogin.findOne({ username });
+    const user = await StudentLogin.findOne({ email });
 
     if (user) {
+      username = user.username;
       // Compare the hashed password
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (isPasswordValid) {

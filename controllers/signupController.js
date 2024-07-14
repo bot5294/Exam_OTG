@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const StudentLogin = require('../models/loginModel');
+const userModel = require('../models/userModel');
 
 // Signup function
 exports.signup = async (req, res) => {
@@ -28,6 +29,12 @@ exports.signup = async (req, res) => {
 
     // Save the user to the database
     await newUser.save();
+
+    const userDetails = new userModel({
+      user_id:newUser._id
+    })
+
+    await userDetails.save();
 
     return res.json({ success: true, message: 'Signup successfull!',username });
   } catch (error) {

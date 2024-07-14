@@ -1,12 +1,15 @@
 const jwt = require('jsonwebtoken');
 
 const tokenVerification = (req, res, next) => {
-  const token = req.headers['authorization'];
-  console.log("token : ",token);
-  if (!token) {
-    console.log("no token provided.");
-    return res.json({ success:false,message: 'No token provided.' });
+  const authorizationHeader = req.headers['authorization'];
+
+  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    console.log("No token provided.");
+    return res.status(401).json({ success: false, message: 'No token provided.' });
   }
+
+  // Extract token without the 'Bearer ' prefix
+  const token = authorizationHeader.split(' ')[1];
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
         console.log("error at token validation : ",err);

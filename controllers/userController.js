@@ -9,7 +9,7 @@ exports.getDetails = async (req, res) => {
       if(!userId){
         return res.json({success:false,message:'Missing required parameters.'});
       }
-      const user = await userModel.findOne({ user_id:userId }).populate('StudentDetails');
+      const user = await userModel.findOne({ user_id:userId }).populate('StudentLogin');
 
       if(!user){
         return res.json({success:false,message:'User Not found.'});
@@ -18,8 +18,8 @@ exports.getDetails = async (req, res) => {
       const lname = user.lname;
       const location = user.location;
       const created_at = user.created_at;
-      const email = user.StudentDetails.email;
-      const username = user.StudentDetails.username;
+      const email = user.StudentLogin.email;
+      const username = user.StudentLogin.username;
       return res.json({success:true,details:{fname,lname,location,created_at,email,username}});
     } catch (error) {
       console.error("Error:", error);

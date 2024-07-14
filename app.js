@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
-const homeRoutes = require('./routes/homeRoutes');
+const userRoutes = require('./routes/userRoutes');
 const loginRoutes = require('./routes/loginRoutes');
 const connectDB = require('./config/db');
 
@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/', loginRoutes);
-app.use('/', homeRoutes);
+app.use('/user', userRoutes);
 
 
 module.exports = app;

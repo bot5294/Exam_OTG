@@ -47,13 +47,12 @@ exports.adminLogin = async (req, res) => {
     const user = await AdminLogin.findOne({ email });
 
     if (user) {
-      username = user.username;
       user_id = user._id;
       // Compare the hashed password
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (isPasswordValid) {
         const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:'2h'});
-        return res.json({ success: true, message: 'Login successful!',token,username,user_id});
+        return res.json({ success: true, message: 'Login successful!',token,user_id});
       } else {
         return res.json({ success: false, message: 'Invalid username or password' });
       }

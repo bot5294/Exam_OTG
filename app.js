@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
 const userRoutes = require('./routes/userRoutes');
 const loginRoutes = require('./routes/loginRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const connectDB = require('./config/db');
 
 const app = express();
@@ -20,8 +21,10 @@ app.use(express.json()); // Middleware to parse JSON
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+console.log('@app.js');
 app.use('/', loginRoutes);
 app.use('/user', userRoutes);
+app.use('/admin',adminRoutes);
 
 
 module.exports = app;

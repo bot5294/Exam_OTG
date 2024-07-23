@@ -9,7 +9,7 @@ exports.getDetails = async (req, res) => {
       if(!userId){
         return res.json({success:false,message:'Missing required parameters.'});
       }
-      const user = await userModel.findOne({ user_id:userId }).populate('StudentLogin');
+      const user = await userModel.findOne({ user_id:userId }).populate('user_id');
 
       if(!user){
         return res.json({success:false,message:'User Not found.'});
@@ -46,5 +46,28 @@ exports.getDetails = async (req, res) => {
     }catch(error){
         console.error("Error:",error);
         return res.status(500).json({success:false,message:'Server error @ setUserDeatils'});
+    }
+  }
+
+  exports.fetchUsers = async (req,res)=>{
+    const { offset = 0, limit = 10, name } = req.query;
+
+    try {
+      const query = {};
+      if (name) {
+        query.$or = [
+          { fname: new RegExp(name, 'i') }, // Case-insensitive search for fname
+          { lname: new RegExp(name, 'i') }  // Case-insensitive search for lname
+        ];
+      }
+  
+      const students = await User.find(query)
+        .skip(parseInt(offset))
+        .limit(parseInt(limit));
+  
+      res.status(200).json(students);
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      res.status(500).json({ error: 'Failed to fetch students' });
     }
   }

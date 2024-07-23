@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel');
+const loginModel = require('../models/loginModel');
 exports.getDetails = async (req, res) => {
     try {
       console.log("Request Body:", req.body);
@@ -60,10 +61,16 @@ exports.getDetails = async (req, res) => {
           { lname: new RegExp(name, 'i') }  // Case-insensitive search for lname
         ];
       }
-  
-      const students = await User.find(query)
-        .skip(parseInt(offset))
-        .limit(parseInt(limit));
+      const mongoQuery = userModel.find()
+      .skip(parseInt(offset))
+      .limit(parseInt(limit));
+
+    // Print the raw MongoDB query
+    console.log('MongoDB Query:', mongoQuery.getQuery());
+  console.log("query => ",query);
+      const students = await loginModel.find();
+        // .skip(parseInt(offset))
+        // .limit(parseInt(limit));
   
       res.status(200).json(students);
     } catch (error) {

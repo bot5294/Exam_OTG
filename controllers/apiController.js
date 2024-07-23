@@ -9,8 +9,10 @@ exports.validateToken = (req,res)=>{
   
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("decodedToken : ",decodedToken);
       res.status(200).json({ valid: true, decodedToken });
     } catch (error) {
+      console.log("error => ",error);
       res.status(401).json({ valid: false, message: 'Invalid token' });
     }
 }

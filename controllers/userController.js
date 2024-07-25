@@ -57,22 +57,16 @@ exports.getDetails = async (req, res) => {
       const query = {};
       if (name) {
         query.$or = [
-          { fname: new RegExp(name, 'i') }, // Case-insensitive search for fname
-          { lname: new RegExp(name, 'i') }  // Case-insensitive search for lname
+          { username: new RegExp(name, 'i') }, // Case-insensitive search for fname
+          { email: new RegExp(name, 'i') }  // Case-insensitive search for lname
         ];
       }
-      const mongoQuery = userModel.find()
-      .skip(parseInt(offset))
-      .limit(parseInt(limit));
 
-    // Print the raw MongoDB query
-    console.log('MongoDB Query:', mongoQuery.getQuery());
-  console.log("query => ",query);
-      const students = await loginModel.find();
-        // .skip(parseInt(offset))
-        // .limit(parseInt(limit));
+      const students = await loginModel.find(query)
+        .skip(parseInt(offset))
+        .limit(parseInt(limit));
   
-      res.status(200).json(students);
+      res.status(200).json({students,'total_users':students.length});
     } catch (error) {
       console.error(error); // Log the error for debugging
       res.status(500).json({ error: 'Failed to fetch students' });

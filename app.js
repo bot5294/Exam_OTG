@@ -27,6 +27,7 @@ app.use('/', loginRoutes);
 app.use('/user', userRoutes);
 app.use('/admin',adminRoutes);
 app.use('/api',apiRoutes);
+app.use('/exam',examRoutes);
 
 
 module.exports = app;

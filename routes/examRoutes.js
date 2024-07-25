@@ -3,5 +3,5 @@ const router = express.Router();
 const examController = require('../controllers/examController');
 const verify = require('../middlewares/tokenVerification');
 
-router.get('/all',verify, examController);
+router.get('/all',verify, examController.getAllExams);
 module.exports = router;

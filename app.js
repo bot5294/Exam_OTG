@@ -6,6 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const loginRoutes = require('./routes/loginRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const apiRoutes = require('./routes/apiRoutes');
+const examRoutes = require('./routes/examRoutes');
 const connectDB = require('./config/db');
 
 const app = express();

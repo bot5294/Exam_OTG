@@ -51,14 +51,14 @@ exports.getDetails = async (req, res) => {
   }
 
   exports.fetchUsers = async (req,res)=>{
-    const { offset = 0, limit = 10, name } = req.query;
+    const { offset = 0, limit = 10, search } = req.query;
 
     try {
       const query = {};
-      if (name) {
+      if (search) {
         query.$or = [
-          { username: new RegExp(name, 'i') }, // Case-insensitive search for fname
-          { email: new RegExp(name, 'i') }  // Case-insensitive search for lname
+          { username: new RegExp(search, 'i') }, // Case-insensitive search for fname
+          { email: new RegExp(search, 'i') }  // Case-insensitive search for lname
         ];
       }
 
@@ -70,5 +70,24 @@ exports.getDetails = async (req, res) => {
     } catch (error) {
       console.error(error); // Log the error for debugging
       res.status(500).json({ error: 'Failed to fetch students' });
+    }
+  }
+
+  exports.getUsernames = async(req,res)=>{
+    console.log('inside getUsernames');
+    
+    console.log(req.body);
+
+    const { userIds } = req.body; // Assuming userIds is being passed
+    try {
+      // Fetch usernames based on userIds
+      // Example: Assuming you're using Mongoose for MongoDB
+      const users = await loginModel.find({ _id: { $in: userIds } }, 'username'); // Fetch usernames for given user IDs
+      console.log(users);
+  
+      return res.status(200).json(users); // Send the user data back
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Failed to fetch usernames' });
     }
   }
